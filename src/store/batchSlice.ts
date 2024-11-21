@@ -33,12 +33,11 @@ export const batchSlice = createSlice({
       const { chainId, safeAddress, txDetails } = action.payload
       state[chainId] = state[chainId] || {}
       state[chainId][safeAddress] = state[chainId][safeAddress] || []
-      // @ts-expect-error
-      state[chainId][safeAddress].push({
-        id: Math.random().toString(36).slice(2),
-        timestamp: Date.now(),
-        txDetails,
-      })
+      // state[chainId][safeAddress].push({
+      //   id: Math.random().toString(36).slice(2),
+      //   timestamp: Date.now(),
+      //   txDetails,
+      // })
     },
 
     // Remove a tx to the batch by txId

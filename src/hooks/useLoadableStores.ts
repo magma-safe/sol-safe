@@ -15,7 +15,7 @@ import useLoadMessages from './loadables/useLoadSafeMessages'
 import { chainsSlice } from '@/store/chainsSlice'
 import { safeInfoSlice } from '@/store/safeInfoSlice'
 import { balancesSlice } from '@/store/balancesSlice'
-import { tokenSlice } from '@/store/tokensSlice'
+import { tokenListSlice } from '@/store/tokensSlice'
 
 import { txHistorySlice } from '@/store/txHistorySlice'
 import { txQueueSlice } from '@/store/txQueueSlice'
@@ -49,7 +49,7 @@ const useLoadableStores = () => {
   useUpdateStore(safeInfoSlice, useLoadSafeInfo)
   useUpdateStore(balancesSlice, useLoadBalances)
   useUpdateStore(solVaultTxnSlice, useLoadSolVaultTxns)
-  useUpdateStore(tokenSlice, useLoadTokenList)
+  useUpdateStore(tokenListSlice, useLoadTokenList)
 
   // useUpdateStore(txHistorySlice, useLoadTxHistory)
   // useUpdateStore(txQueueSlice, useLoadTxQueue)

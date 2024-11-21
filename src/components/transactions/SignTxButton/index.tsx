@@ -25,7 +25,7 @@ const SignTxButton = ({
   const { setTxFlow } = useContext(TxModalContext)
   // const wallet = useWallet()
   const wallet = useSolWallet()
-  const txn = useAppSelector((state) => { return state.solVaultTxn.data?.find((i) => { return i.index.toString() === txSummary.id.toString() }) })
+  const txn = useAppSelector((state) => { return state.solVaultTxn.data?.find((i: SolVaultTxnType) => { return i.index.toString() === txSummary.id.toString() }) })
 
   const isSignable = useCallback(() => {
     if (!safe || !wallet || !wallet.publicKey || !txn) {
@@ -37,9 +37,9 @@ const SignTxButton = ({
     })) {
       return false
     }
-    const isUserInApproval = !!txn.approved.find((i) => { return i === wallet.publicKey?.toBase58() })
-    const isUserInRejected = !!txn.rejected.find((i) => { return i === wallet.publicKey?.toBase58() })
-    const isUserInCancelled = !!txn.cancelled.find((i) => { return i === wallet.publicKey?.toBase58() })
+    const isUserInApproval = !!txn.approved.find((i: string) => { return i === wallet.publicKey?.toBase58() })
+    const isUserInRejected = !!txn.rejected.find((i: string) => { return i === wallet.publicKey?.toBase58() })
+    const isUserInCancelled = !!txn.cancelled.find((i: string) => { return i === wallet.publicKey?.toBase58() })
 
     const hasAlreadySigned = isUserInApproval || isUserInCancelled || isUserInRejected
     if (hasAlreadySigned) {

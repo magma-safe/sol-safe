@@ -24,6 +24,7 @@ import {
 } from '@solana/web3.js'
 import { useWallet as useSolWallet, useConnection } from '@solana/wallet-adapter-react'
 import useSafeAddress, { useSafeCreateKey } from '@/hooks/useSafeAddress'
+import { useRouter } from 'next/navigation'
 
 export const SignSolForm = ({
   // safeTx,
@@ -60,6 +61,7 @@ export const SignSolForm = ({
   const [submitError, setSubmitError] = useState<Error | undefined>()
   const [isRejectedByUser, setIsRejectedByUser] = useState<Boolean>(false)
 
+  const router = useRouter()
   // Hooks
   const { signTx } = txActions
   const { setTxFlow } = useContext(TxModalContext)
@@ -86,6 +88,7 @@ export const SignSolForm = ({
     try {
 
       resultTxId = await signTx(safeSolTxInstructions, connection, safeCreateKey, connectedAddress!, signTransaction!, sendTransaction!)
+      router.refresh()
     } catch (_err) {
       const err = asError(_err)
       if (isWalletRejection(err)) {

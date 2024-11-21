@@ -20,7 +20,7 @@ export const initTokensSlice: TokenSliceType = {
 
 const { slice, selector } = makeLoadableSlice('tokens', initTokensSlice)
 
-export const tokenSlice = slice
-export const selectTokensSelector = selector
+export const tokenListSlice = slice
+export const selectTokensListSelector = selector
 
-export const selectTokens = createSelector(selectTokensSelector, (tokenSlice): TokenInfo[] => tokenSlice.data.items)
+export const selectToken = createSelector(selectTokensListSelector, (tokenSlice): TokenInfo[] => tokenSlice.data.items)

@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '@/store'
 import useSolVaultActions from '@/hooks/useSolVaultAction'
 import { showNotification } from '@/store/notificationsSlice'
 import { useRouter } from 'next/navigation'
+import { SolVaultTxnType } from '@/utils/solvaulthelper'
 
 const RejectTxButton = ({
   txSummary,
@@ -29,7 +30,7 @@ const RejectTxButton = ({
 }): ReactElement | null => {
   const { safe } = useSafeInfo()
 
-  const txn = useAppSelector((state) => { return state.solVaultTxn.data?.find((i) => { return i.index.toString() === txSummary.id.toString() }) })
+  const txn = useAppSelector((state) => { return state.solVaultTxn.data?.find((i: SolVaultTxnType) => { return i.index.toString() === txSummary.id.toString() }) })
 
   const wallet = useSolWallet()
   const isSignable = useCallback(() => {
@@ -42,9 +43,9 @@ const RejectTxButton = ({
     })) {
       return false
     }
-    const isUserInApproval = !!txn.approved.find((i) => { return i === wallet.publicKey?.toBase58() })
-    const isUserInRejected = !!txn.rejected.find((i) => { return i === wallet.publicKey?.toBase58() })
-    const isUserInCancelled = !!txn.cancelled.find((i) => { return i === wallet.publicKey?.toBase58() })
+    const isUserInApproval = !!txn.approved.find((i: string) => { return i === wallet.publicKey?.toBase58() })
+    const isUserInRejected = !!txn.rejected.find((i: string) => { return i === wallet.publicKey?.toBase58() })
+    const isUserInCancelled = !!txn.cancelled.find((i: string) => { return i === wallet.publicKey?.toBase58() })
 
     const hasAlreadySigned = isUserInApproval || isUserInCancelled || isUserInRejected
     if (hasAlreadySigned) {

@@ -5,6 +5,7 @@ import SignOrExecuteSkeleton from './SignOrExecuteSkeleton'
 import { useProposeTx } from './hooks'
 import { useContext } from 'react'
 import useSafeInfo from '@/hooks/useSafeInfo'
+import { useWallet } from '@solana/wallet-adapter-react'
 
 type SignOrExecuteExtendedProps = Omit<SignOrExecuteProps, 'txId'> & {
   onSubmit?: SubmitCallback
@@ -27,8 +28,12 @@ const SignOrExecute = (props: SignOrExecuteExtendedProps) => {
   const [txDetails, error] = useProposeTx(safe.deployed ? safeTx : undefined, props.txId, props.origin)
 
   // Show the loader only the first time the tx is being loaded
-  if (!safeSolTxInstructions) {
-    return <SignOrExecuteSkeleton />
+  if (safeSolTxInstructions) {
+    return <div>
+      <SignOrExecuteSkeleton />
+
+    </div>
+
   }
 
   return (

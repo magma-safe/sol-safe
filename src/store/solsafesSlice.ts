@@ -43,7 +43,7 @@ export const solSafeSlice = createSlice({
         state.safes.push(payload.safe)
       }
 
-      localStorage.setItem('safes', JSON.stringify(state.safes))
+      // localStorage.setItem('safes', JSON.stringify(state.safes))
     },
     removeSolSafe: (state, { payload }: PayloadAction<{ address: string }>) => {
       let foundIndex = -1
@@ -58,7 +58,7 @@ export const solSafeSlice = createSlice({
       if (foundIndex !== -1) {
         delete state.safes[foundIndex]
       }
-      localStorage.setItem('safes', JSON.stringify(state.safes))
+      // localStorage.setItem('safes', JSON.stringify(state.safes))
     },
   },
 })

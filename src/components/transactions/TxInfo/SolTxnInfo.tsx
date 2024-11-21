@@ -66,7 +66,7 @@ export const TransferTx = ({
     )
   } else if (item.decodedAction && item.decodedAction.type === "TOKEN_TRANSFER") {
 
-    const token = tokens.find((i) => {
+    const token = tokens.find((i: any) => {
       return i.address === item.decodedAction?.programId
     })
     if (!token) {

@@ -10,7 +10,6 @@ import { AppRoutes } from '@/config/routes'
 import css from './styles.module.css'
 
 import SafeListContextMenu from '@/components/sidebar/SafeListContextMenu'
-import useSafeAddress from '@/hooks/useSafeAddress'
 
 import classnames from 'classnames'
 import { useRouter } from 'next/router'
@@ -94,7 +93,7 @@ const AccountItem = ({ onLinkClick, safeItem }: AccountItemProps) => {
         </Link>
       </Track>
 
-      <SafeListContextMenu name={"remove"} address={solSafeAddress} chainId={"1"} addNetwork={false} remove />
+      <SafeListContextMenu name="remove" address={solSafeAddress} chainId="1" addNetwork={false} remove />
 
       <QueueActions
         queued={0}

@@ -21,8 +21,10 @@ export const useLoadSolVaultTxns = (): AsyncResult<SolVaultTxnType[]> => {
   // Re-fetch when chainId/address, or txQueueTag change
   const [data, error, loading] = useAsync<SolVaultTxnType[]>(
     () => {
+      if (!createKey) return
       if (!safeLoaded) return
       if (!safe.deployed) return Promise.resolve([])
+
       return getSolVaultTxns(connection, createKey, tokensList)
       // return getTransactionQueue('11155111', '0xe55A1EF640Cf41f53491A2F0aEf681107Eab9de4')
     },

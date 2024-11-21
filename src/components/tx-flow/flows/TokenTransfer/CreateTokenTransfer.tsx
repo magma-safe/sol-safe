@@ -13,6 +13,8 @@ import { formatVisualAmount } from '@/utils/formatters'
 import commonCss from '@/components/tx-flow/common/styles.module.css'
 import TokenAmountInput from '@/components/common/TokenAmountInput'
 import { SafeTxContext } from '@/components/tx-flow/SafeTxProvider'
+import { useWallet } from '@solana/wallet-adapter-react'
+import ConnectWalletButton from '@/components/common/ConnectWallet/ConnectWalletButton'
 
 export const AutocompleteItem = (item: { tokenInfo: TokenInfo; balance: string }): ReactElement => (
   <Grid container alignItems="center" gap={1}>
@@ -75,6 +77,7 @@ export const CreateTokenTransfer = ({
   const recipient = watch(TokenTransferFields.recipient)
   const tokenAddress = watch(TokenTransferFields.tokenAddress)
   const type = watch(TokenTransferFields.type)
+  const { connected, connect } = useWallet()
 
   const selectedToken = balancesItems.find((item) => item.tokenInfo.address === tokenAddress)
   const { totalAmount, spendingLimitAmount } = useTokenAmount(selectedToken)
@@ -108,9 +111,11 @@ export const CreateTokenTransfer = ({
           <Divider className={commonCss.nestedDivider} />
 
           <CardActions>
-            <Button variant="contained" type="submit">
+            {connected ? <Button variant="contained" type="submit" disabled={!connected}>
               Next
-            </Button>
+            </Button> :
+              <ConnectWalletButton />}
+
           </CardActions>
         </form>
       </FormProvider>

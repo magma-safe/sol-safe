@@ -18,6 +18,7 @@ import type { SafeInfo, Transaction } from '@safe-global/safe-gateway-typescript
 import type { RecoveryQueueItem } from '@/features/recovery/services/recovery-state'
 import { useAppSelector } from '@/store'
 import SolTxSummary from '@/components/transactions/TxSummary/SolTxnSummary'
+import { SolVaultTxnType } from '@/utils/solvaulthelper'
 
 const PendingRecoveryListItem = dynamic(() => import('./PendingRecoveryListItem'))
 
@@ -88,7 +89,7 @@ const PendingTxsList = (): ReactElement | null => {
     if (!state.solVaultTxn || !state.solVaultTxn.data) {
       return []
     }
-    return state.solVaultTxn.data.filter((i) => { return i.status === "Active" })
+    return state.solVaultTxn.data.filter((i: any) => { return i.status === "Active" })
   })
 
   const [recoveryTxs, queuedTxs] = useMemo(() => {
@@ -102,7 +103,6 @@ const PendingTxsList = (): ReactElement | null => {
 
   const totalTxs = pendingTxns.length
 
-  console.log("totalTxstotalTxstotalTxstotalTxs", totalTxs)
 
   const queueUrl = useMemo(
     () => ({
@@ -138,7 +138,7 @@ const PendingTxsList = (): ReactElement | null => {
             ))} */}
 
             {
-              pendingTxns.slice(0, 4).map((item, index) => {
+              pendingTxns.slice(0, 4).map((item: SolVaultTxnType, index: number) => {
                 return <SolTxSummary key={index} item={item} isConflictGroup={false} isBulkGroup={false} />
               })
             }

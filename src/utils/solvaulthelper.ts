@@ -11,7 +11,7 @@ import {
 import { getAccount, transferInstructionData } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import * as multisig from '@sqds/multisig'
-
+import { Buffer as SBuffer } from 'buffer'
 type TransferDecodedTxn = {
   type: 'SOL_TRANSFER' | 'TOKEN_TRANSFER'
   programId?: string
@@ -35,14 +35,7 @@ export type SolVaultTxnType = {
   cancelled: string[]
   txnSummary?: TransactionSummary
   txnDetails?: TransactionDetails
-
   decodedAction?: TransferDecodedTxn
-}
-
-function readBigUInt64LE(buffer: Buffer, offset = 0) {
-  const low = buffer.readUInt32LE(offset)
-  const high = buffer.readUInt32LE(offset + 4)
-  return (BigInt(high) << 32n) | BigInt(low)
 }
 
 export const getSolVaultTxns = async (
@@ -117,9 +110,10 @@ export const getSolVaultTxns = async (
     })
   }
 
-  return txns.sort((item1, item2) => {
+  const resp: SolVaultTxnType[] = txns.sort((item1, item2) => {
     return Number(item2.timestamp) - Number(item1.timestamp)
   })
+  return resp
 }
 
 export const decodeVaultTxn = async (
@@ -163,21 +157,17 @@ const parseTokenTransferTxn = async (message: multisig.generated.VaultTransactio
 const parseSolTransferTxn = (message: multisig.generated.VaultTransactionMessage) => {
   for (const instruction of message.instructions) {
     const programId = message.accountKeys[instruction.programIdIndex].toString()
-
     if (programId === '11111111111111111111111111111111') {
-      const dataBuffer = Buffer.from(instruction.data)
+      const dataBuffer = SBuffer.from(instruction.data)
       const instructionType = dataBuffer[0]
       if (instructionType === 2) {
         const lamports = dataBuffer.readBigUInt64LE(4)
-
         const destinationAccount = message.accountKeys[instruction.accountIndexes[1]]
-
         const payload: TransferDecodedTxn = {
           type: 'SOL_TRANSFER',
           amount: lamports.toString(),
           to: destinationAccount.toBase58(),
         }
-
         return payload
       }
     }

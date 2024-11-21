@@ -144,7 +144,6 @@ const createSolanaTokenTransferTxn = async (
     instructions.push(createTransferInstruction(senderPDA, recevierPDA, new PublicKey(vaultAddress), BigInt(amount)))
     return instructions
   } catch (err) {
-    console.log('createSolanaTokenTransferTxncreateSolanaTokenTransferTxn', err)
     throw err
   }
 }

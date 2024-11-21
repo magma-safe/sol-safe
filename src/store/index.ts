@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
   [slices.chainsSlice.name]: slices.chainsSlice.reducer,
   [slices.safeInfoSlice.name]: slices.safeInfoSlice.reducer,
   [slices.balancesSlice.name]: slices.balancesSlice.reducer,
-  [slices.tokenSlice.name]: slices.tokenSlice.reducer,
+  [slices.tokenListSlice.name]: slices.tokenListSlice.reducer,
   [slices.sessionSlice.name]: slices.sessionSlice.reducer,
   [slices.txHistorySlice.name]: slices.txHistorySlice.reducer,
   [slices.txQueueSlice.name]: slices.txQueueSlice.reducer,

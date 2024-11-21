@@ -118,20 +118,20 @@ export const AppProviders = ({ children }: { children: ReactNode | ReactNode[] }
   }, [])
 
 
-  const loadSafes = async () => {
-    const safeFromStorage = localStorage.getItem("safes")
-    if (safeFromStorage) {
-      const safes: SolSafeItem[] = JSON.parse(safeFromStorage)
-      dispatch(solSafeSlice.actions.setSolSafes(safes))
-    }
-  }
+  // const loadSafes = async () => {
+  //   const safeFromStorage = localStorage.getItem("safes")
+  //   if (safeFromStorage) {
+  //     const safes: SolSafeItem[] = JSON.parse(safeFromStorage)
+  //     dispatch(solSafeSlice.actions.setSolSafes(safes))
+  //   }
+  // }
 
   return (
     <SafeThemeProvider mode={themeMode}>
       {(safeTheme: Theme) => (
         <ThemeProvider theme={safeTheme}>
           <SolanaWalletProvider wallets={wallets} autoConnect>
-            <SolanaWalletModalProvider>
+            <SolanaWalletModalProvider >
               <WalletProvider>
 
                 <ConnectionProvider endpoint={endpoint}>

@@ -4,12 +4,7 @@ import type { ReactElement, Dispatch, SetStateAction } from 'react'
 
 import ModalDialog from '@/components/common/ModalDialog'
 import { useAppDispatch } from '@/store'
-import { trackEvent, SETTINGS_EVENTS, OVERVIEW_EVENTS, OVERVIEW_LABELS } from '@/services/analytics'
-import { addedSafesSlice } from '@/store/addedSafesSlice'
-import { addressBookSlice } from '@/store/addressBookSlice'
-import { safeAppsSlice } from '@/store/safeAppsSlice'
-import { settingsSlice } from '@/store/settingsSlice'
-import { FileListCard } from '@/components/settings/DataManagement/FileListCard'
+
 import { useGlobalImportJsonParser, useGlobalImportSolJsonParser } from '@/components/settings/DataManagement/useGlobalImportFileParser'
 import FileIcon from '@/public/images/settings/data/file.svg'
 import { ImportFileUpload } from '@/components/settings/DataManagement/ImportFileUpload'

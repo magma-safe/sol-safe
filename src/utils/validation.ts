@@ -1,4 +1,4 @@
-import { parsePrefixedAddress, sameAddress, isChecksummedAddress } from './addresses'
+import { parsePrefixedAddress, sameAddress } from './addresses'
 import { safeFormatUnits, safeParseUnits } from './formatters'
 import { PublicKey } from '@solana/web3.js'
 

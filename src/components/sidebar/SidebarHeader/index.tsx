@@ -41,7 +41,7 @@ const SafeHeader = (): ReactElement => {
   const settings = useAppSelector(selectSettings)
   const { ens } = useAddressResolver(safeAddress)
 
-  const addressCopyText = settings.shortName.copy && chain ? `${chain.shortName}:${safeAddress}` : safeAddress
+  const addressCopyText = safeAddress
 
   const blockExplorerLink = chain ? getBlockExplorerLink(chain, safeAddress) : undefined
 

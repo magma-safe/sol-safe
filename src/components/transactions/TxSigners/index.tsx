@@ -32,6 +32,7 @@ import CancelIcon from '@/public/images/common/cancel.svg'
 import useTransactionStatus from '@/hooks/useTransactionStatus'
 import useSafeAddress from '@/hooks/useSafeAddress'
 import { useAppSelector } from '@/store'
+import { SolVaultTxnType } from '@/utils/solvaulthelper'
 
 // Icons
 const Created = () => (
@@ -119,7 +120,7 @@ export const TxSigners = ({ txDetails, txSummary }: TxSignersProps): ReactElemen
   const wallet = useWallet()
   const { safe } = useSafeInfo()
 
-  const txn = useAppSelector((state) => { return state.solVaultTxn.data?.find((i) => { return i.index.toString() === txDetails.txId.toString() }) })
+  const txn = useAppSelector((state) => { return state.solVaultTxn.data?.find((i: SolVaultTxnType) => { return i.index.toString() === txDetails.txId.toString() }) })
 
 
 

@@ -1,64 +1,39 @@
-import { selectUndeployedSafe } from '@/features/counterfactual/store/undeployedSafesSlice'
-import { getUndeployedSafeInfo } from '@/features/counterfactual/utils'
-import { useAppSelector } from '@/store'
 import { useEffect } from 'react'
-import {
-  AddressEx,
-  getSafeInfo,
-  ImplementationVersionState,
-  type SafeInfo,
-} from '@safe-global/safe-gateway-typescript-sdk'
+import { AddressEx, ImplementationVersionState, type SafeInfo } from '@safe-global/safe-gateway-typescript-sdk'
 import useAsync, { type AsyncResult } from '../useAsync'
 import useSafeAddress from '../useSafeAddress'
-import { useChainId } from '../useChainId'
-import useIntervalCounter from '../useIntervalCounter'
 import useSafeInfo from '../useSafeInfo'
 import { Errors, logError } from '@/services/exceptions'
-import { POLLING_INTERVAL } from '@/config/constants'
-import { useCurrentChain } from '../useChains'
 import * as multisig from '@sqds/multisig'
-import {
-  PublicKey,
-  Keypair,
-  Connection,
-  Signer,
-  SendOptions,
-  TransactionSignature,
-  TransactionMessage,
-  ComputeBudgetProgram,
-  VersionedTransaction,
-} from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { useConnection } from '@solana/wallet-adapter-react'
+import { useAppSelector } from '@/store'
+import { SolSafeItem } from '@/types/safetypes'
+import { POLLING_INTERVAL } from '@/config/constants'
+import useIntervalCounter from '../useIntervalCounter'
 
 export const useLoadSafeInfo = (): AsyncResult<SafeInfo> => {
   const address = useSafeAddress()
-  const chainId = useChainId()
-  const chain = useCurrentChain()
-  const [pollCount, resetPolling] = useIntervalCounter(POLLING_INTERVAL)
   const { safe } = useSafeInfo()
-  const isStoredSafeValid = safe.chainId === chainId && safe.address.value === address
-  const undeployedSafe = useAppSelector((state) => selectUndeployedSafe(state, chainId, address))
   const { connection } = useConnection()
+  const [pollCount, resetPolling] = useIntervalCounter(POLLING_INTERVAL)
+
+  const safes = useAppSelector((state) => {
+    return state.solSafeSlice.safes
+  })
 
   const [data, error, loading] = useAsync<SafeInfo | undefined>(async () => {
-    if (!address || !connection) return
-
-    const rawSafes = localStorage.getItem('safes')
-
-    if (!rawSafes) {
-      return
-    }
+    if (!address || !connection || !safes) return
 
     let rawCreateKey: string = ''
 
     try {
-      const safes = JSON.parse(rawSafes)
-      const safe = safes.find((s: any) => {
-        return s['safeAddress'].toLowerCase() === address.toLowerCase()
+      const safe = safes.find((s: SolSafeItem) => {
+        return s.safeAddress.toLowerCase() === address.toLowerCase()
       })
 
       if (safe) {
-        rawCreateKey = safe['createKey']
+        rawCreateKey = safe.createKey
       }
     } catch (err) {
       return
@@ -67,6 +42,7 @@ export const useLoadSafeInfo = (): AsyncResult<SafeInfo> => {
     if (!rawCreateKey) {
       return
     }
+
     const createKey = new PublicKey(rawCreateKey)
     const [multisigPda] = multisig.getMultisigPda({
       createKey,
@@ -115,14 +91,15 @@ export const useLoadSafeInfo = (): AsyncResult<SafeInfo> => {
       txHistoryTag: null,
       messagesTag: null,
     }
+
     return { ...safeInfo, deployed: true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, connection])
+  }, [address, safes, connection, pollCount])
 
   // Reset the counter when safe address/chainId changes
-  // useEffect(() => {
-  //   resetPolling()
-  // }, [resetPolling, address])
+  useEffect(() => {
+    resetPolling()
+  }, [resetPolling, address])
 
   // Log errors
   useEffect(() => {
@@ -131,12 +108,7 @@ export const useLoadSafeInfo = (): AsyncResult<SafeInfo> => {
     }
   }, [error])
 
-  return [
-    // Return stored SafeInfo between polls
-    data ?? (isStoredSafeValid ? safe : data),
-    error,
-    loading,
-  ]
+  return [data ? data : safe, error, loading]
 }
 
 export default useLoadSafeInfo
