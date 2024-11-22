@@ -28,7 +28,7 @@ const SignOrExecute = (props: SignOrExecuteExtendedProps) => {
   const [txDetails, error] = useProposeTx(safe.deployed ? safeTx : undefined, props.txId, props.origin)
 
   // Show the loader only the first time the tx is being loaded
-  if (safeSolTxInstructions) {
+  if (!safeSolTxInstructions) {
     return <div>
       <SignOrExecuteSkeleton />
 

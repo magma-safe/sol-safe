@@ -47,7 +47,7 @@ const NewTxFlow = () => {
               </Typography>
 
               <SendTokensButton onClick={onTokensClick} />
-              <MakeASwapButton />
+              {/* <MakeASwapButton /> */}
 
               {/* {txBuilder?.app && (
                 <>
